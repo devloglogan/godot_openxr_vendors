@@ -48,3 +48,7 @@ else:
 
 Default(library)
 
+samples  = ['samples/fb-passthrough-sample']
+for sample in samples:
+    sample_library = env.Install(target=f'#{sample}/addons/godotopenxrvendors/.bin', source=library)
+    Default(sample_library)

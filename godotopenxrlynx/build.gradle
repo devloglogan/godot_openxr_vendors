@@ -80,12 +80,14 @@ task copyDebugAARToAddons(type: Copy) {
     from 'build/outputs/aar'
     include 'godotopenxrlynx-debug.aar'
     into '../demo/addons/godotopenxrvendors/.bin/android/debug'
+    into '../samples/fb-passthrough-sample/addons/godotopenxrvendors/.bin/android/debug'
 }
 
 task copyReleaseAARToAddons(type: Copy) {
     from 'build/outputs/aar'
     include 'godotopenxrlynx-release.aar'
     into '../demo/addons/godotopenxrvendors/.bin/android/release'
+    into '../samples/fb-passthrough-sample/addons/godotopenxrvendors/.bin/android/release'
 }
 
 task copyGdExtensionConfigToAssets(type: Copy) {
