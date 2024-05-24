@@ -110,8 +110,6 @@ void OpenXRFbPassthroughGeometry::create_passthrough_geometry() {
 	if (opaque_mesh == nullptr && enable_hole_punch) {
 		instatiate_opaque_mesh();
 	}
-
-	set_notify_local_transform(true);
 }
 
 void OpenXRFbPassthroughGeometry::destroy_passthrough_geometry() {
@@ -186,7 +184,7 @@ void OpenXRFbPassthroughGeometry::_notification(int p_what) {
 				OpenXRFbPassthroughExtensionWrapper::get_singleton()->unregister_geometry_node(this);
 			}
 		} break;
-		case NOTIFICATION_LOCAL_TRANSFORM_CHANGED: {
+		case NOTIFICATION_PROCESS: {
 			if (geometry_instance) {
 				OpenXRFbPassthroughExtensionWrapper::get_singleton()->set_geometry_instance_transform(geometry_instance, get_transform());
 			}
