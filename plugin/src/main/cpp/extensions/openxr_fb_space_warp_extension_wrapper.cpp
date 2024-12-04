@@ -103,13 +103,13 @@ void OpenXRFbSpaceWarpExtensionWrapper::_on_session_created(uint64_t p_instance)
 		enabled = true;
 	}
 
-	String graphics_api_name = get_openxr_api()->get_graphics_api_name();
-	if (graphics_api_name != "OpenGL") {
-		UtilityFunctions::print_verbose("Disabling XR_FB_space_warp extension; this extension is only implmented for OpenGL");
-		fb_space_warp_ext = false;
-		enabled = false;
-		return;
-	}
+	// String graphics_api_name = get_openxr_api()->get_graphics_api_name();
+	// if (graphics_api_name != "OpenGL") {
+	// 	UtilityFunctions::print_verbose("Disabling XR_FB_space_warp extension; this extension is only implmented for OpenGL");
+	// 	fb_space_warp_ext = false;
+	// 	enabled = false;
+	// 	return;
+	// }
 
 	get_openxr_api()->register_projection_views_extension(this);
 }
@@ -137,6 +137,9 @@ void OpenXRFbSpaceWarpExtensionWrapper::_on_state_ready() {
 	if (graphics_api_name == "OpenGL") {
 		motion_vector_swapchain_info = get_openxr_api()->openxr_swapchain_create(0, XR_SWAPCHAIN_USAGE_SAMPLED_BIT | XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT, GL_RGBA16F, width, height, 1, view_count);
 		motion_vector_depth_swapchain_info = get_openxr_api()->openxr_swapchain_create(0, XR_SWAPCHAIN_USAGE_SAMPLED_BIT | XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, GL_DEPTH24_STENCIL8, width, height, 1, view_count);
+	} else {
+		motion_vector_swapchain_info = get_openxr_api()->openxr_swapchain_create(0, XR_SWAPCHAIN_USAGE_SAMPLED_BIT | XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT, 97, width, height, 1, view_count);
+		motion_vector_depth_swapchain_info = get_openxr_api()->openxr_swapchain_create(0, XR_SWAPCHAIN_USAGE_SAMPLED_BIT | XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, 129, width, height, 1, view_count);
 	}
 }
 
