@@ -47,6 +47,7 @@
 
 #include "extensions/openxr_fb_android_surface_swapchain_create_extension_wrapper.h"
 #include "extensions/openxr_fb_body_tracking_extension_wrapper.h"
+#include "extensions/openxr_fb_color_space_extension_wrapper.h"
 #include "extensions/openxr_fb_composition_layer_alpha_blend_extension_wrapper.h"
 #include "extensions/openxr_fb_composition_layer_image_layout_extension_wrapper.h"
 #include "extensions/openxr_fb_composition_layer_secure_content_extension_wrapper.h"
@@ -163,6 +164,9 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			ClassDB::register_class<OpenXRHtcPassthroughExtensionWrapper>();
 			OpenXRHtcPassthroughExtensionWrapper::get_singleton()->register_extension_wrapper();
 
+			ClassDB::register_class<OpenXRFbColorSpaceExtensionWrapper>();
+			OpenXRFbColorSpaceExtensionWrapper::get_singleton()->register_extension_wrapper();
+
 		} break;
 
 		case MODULE_INITIALIZATION_LEVEL_SERVERS:
@@ -184,6 +188,7 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			Engine::get_singleton()->register_singleton("OpenXRFbCompositionLayerSettingsExtensionWrapper", OpenXRFbCompositionLayerSettingsExtensionWrapper::get_singleton());
 			Engine::get_singleton()->register_singleton("OpenXRHtcFacialTrackingExtensionWrapper", OpenXRHtcFacialTrackingExtensionWrapper::get_singleton());
 			Engine::get_singleton()->register_singleton("OpenXRHtcPassthroughExtensionWrapper", OpenXRHtcPassthroughExtensionWrapper::get_singleton());
+			Engine::get_singleton()->register_singleton("OpenXRFbColorSpaceExtensionWrapper", OpenXRFbColorSpaceExtensionWrapper::get_singleton());
 
 			ClassDB::register_class<OpenXRFbRenderModel>();
 			ClassDB::register_class<OpenXRFbHandTrackingMesh>();
