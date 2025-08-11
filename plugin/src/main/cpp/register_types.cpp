@@ -74,6 +74,7 @@
 #include "extensions/openxr_htc_passthrough_extension_wrapper.h"
 #include "extensions/openxr_meta_boundary_visibility_extension_wrapper.h"
 #include "extensions/openxr_meta_environment_depth_extension_wrapper.h"
+#include "extensions/openxr_meta_hand_tracking_microgestures_extension_wrapper.h"
 #include "extensions/openxr_meta_headset_id_extension_wrapper.h"
 #include "extensions/openxr_meta_recommended_layer_resolution_extension_wrapper.h"
 #include "extensions/openxr_meta_simultaneous_hands_and_controllers_extension_wrapper.h"
@@ -149,6 +150,7 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 			GDREGISTER_CLASS(OpenXRFbSpatialEntityUserExtensionWrapper);
 			GDREGISTER_CLASS(OpenXRMetaRecommendedLayerResolutionExtensionWrapper);
 			GDREGISTER_CLASS(OpenXRMetaSimultaneousHandsAndControllersExtensionWrapper);
+			GDREGISTER_CLASS(OpenXRMetaHandTrackingMicrogesturesExtensionWrapper);
 			GDREGISTER_CLASS(OpenXRMetaHeadsetIDExtensionWrapper);
 			GDREGISTER_CLASS(OpenXRMetaSpatialEntityMeshExtensionWrapper);
 			GDREGISTER_CLASS(OpenXRFbSceneExtensionWrapper);
@@ -239,6 +241,10 @@ void initialize_plugin_module(ModuleInitializationLevel p_level) {
 
 				if (_get_bool_project_setting("xr/openxr/extensions/meta/simultaneous_hands_and_controllers")) {
 					_register_extension_with_openxr(OpenXRMetaSimultaneousHandsAndControllersExtensionWrapper::get_singleton());
+				}
+
+				if (_get_bool_project_setting("xr/openxr/extensions/meta/hand_tracking_microgestures")) {
+					_register_extension_with_openxr(OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::get_singleton());
 				}
 			}
 
@@ -433,6 +439,7 @@ void add_plugin_project_settings() {
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/hand_tracking_mesh", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/hand_tracking_capsules", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/simultaneous_hands_and_controllers", false);
+	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/hand_tracking_microgestures", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/render_model", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/anchor_api", false);
 	_add_bool_project_setting(project_settings, "xr/openxr/extensions/meta/anchor_sharing", false);

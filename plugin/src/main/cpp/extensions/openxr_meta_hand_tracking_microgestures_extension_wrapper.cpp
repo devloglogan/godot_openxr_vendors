@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  openxr_meta_hand_tracking_microgestures_extension_wrapper.h           */
+/*  openxr_meta_hand_tracking_microgestures_extension_wrapper.cpp         */
 /**************************************************************************/
 /*                       This file is part of:                            */
 /*                              GODOT XR                                  */
@@ -27,35 +27,52 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#pragma once
+#include "extensions/openxr_meta_hand_tracking_microgestures_extension_wrapper.h"
+#include "openxr/openxr.h"
+#include "util.h"
 
-#include <openxr/openxr.h>
-#include <godot_cpp/classes/open_xr_extension_wrapper_extension.hpp>
-#include <map>
+#include <godot_cpp/classes/open_xrapi_extension.hpp>
 
 using namespace godot;
 
-class OpenXRMetaHandTrackingMicrogesturesExtensionWrapper : public OpenXRExtensionWrapperExtension {
-	GDCLASS(OpenXRMetaHandTrackingMicrogesturesExtensionWrapper, OpenXRExtensionWrapperExtension);
+OpenXRMetaHandTrackingMicrogesturesExtensionWrapper *OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::singleton = nullptr;
 
-public:
-	static OpenXRMetaHandTrackingMicrogesturesExtensionWrapper *get_singleton();
+OpenXRMetaHandTrackingMicrogesturesExtensionWrapper *OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::get_singleton() {
+	if (singleton == nullptr) {
+		singleton = memnew(OpenXRMetaHandTrackingMicrogesturesExtensionWrapper());
+	}
+	return singleton;
+}
 
-	OpenXRMetaHandTrackingMicrogesturesExtensionWrapper();
-	~OpenXRMetaHandTrackingMicrogesturesExtensionWrapper();
+OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::OpenXRMetaHandTrackingMicrogesturesExtensionWrapper() :
+		OpenXRExtensionWrapperExtension() {
+	ERR_FAIL_COND_MSG(singleton != nullptr, "An OpenXRMetaHandTrackingMicrogesturesExtensionWrapper singleton already exists.");
 
-	godot::Dictionary _get_requested_extensions() override;
+	request_extensions[XR_META_HAND_TRACKING_MICROGESTURES_EXTENSION_NAME] = &meta_hand_tracking_microgestures_ext;
+	singleton = this;
+}
 
-	void _on_instance_destroyed() override;
+OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::~OpenXRMetaHandTrackingMicrogesturesExtensionWrapper() {
+	cleanup();
+	singleton = nullptr;
+}
 
-protected:
-	static void _bind_methods();
+godot::Dictionary OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::_get_requested_extensions() {
+	godot::Dictionary result;
+	for (auto ext : request_extensions) {
+		godot::String key = ext.first;
+		uint64_t value = reinterpret_cast<uint64_t>(ext.second);
+		result[key] = (godot::Variant)value;
+	}
+	return result;
+}
 
-private:
-	void cleanup();
+void OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::_on_instance_destroyed() {
+	cleanup();
+}
 
-	static OpenXRMetaHandTrackingMicrogesturesExtensionWrapper *singleton;
+void OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::_bind_methods() {}
 
-	std::map<godot::String, bool *> request_extensions;
-	bool meta_hand_tracking_microgestures_ext = false;
-};
+void OpenXRMetaHandTrackingMicrogesturesExtensionWrapper::cleanup() {
+	meta_hand_tracking_microgestures_ext = false;
+}
