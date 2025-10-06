@@ -8,7 +8,7 @@ const MOVE_SPEED := 2.0
 var movement_input := Vector2.ZERO
 var smooth_turn_input := 0.0
 var snap_turn_enabled := false
-var countdown_to_check_space_warp_enabled: int = 3
+var countdown_to_check_frame_synthesis_enabled: int = 3
 
 @onready var xr_origin: XROrigin3D = $XROrigin3D
 @onready var xr_camera: XRCamera3D = $XROrigin3D/XRCamera3D
@@ -37,31 +37,33 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if countdown_to_check_space_warp_enabled > 0:
-		countdown_to_check_space_warp_enabled -= 1
-		if countdown_to_check_space_warp_enabled == 0:
-			var fb_space_warp = Engine.get_singleton("OpenXRFbSpaceWarpExtensionWrapper")
-			if !fb_space_warp or !fb_space_warp.is_enabled():
+	if countdown_to_check_frame_synthesis_enabled > 0:
+		countdown_to_check_frame_synthesis_enabled -= 1
+		if countdown_to_check_frame_synthesis_enabled == 0:
+			var frame_synthesis = Engine.get_singleton("OpenXRFrameSynthesisExtension")
+			if !frame_synthesis or !frame_synthesis.enabled:
 				right_controller_label.text = right_controller_label.text.replace("ENABLED", "DISABLED")
 
 
 func _physics_process(delta: float) -> void:
 	if movement_input != Vector2.ZERO:
-		xr_origin.position.z += -movement_input.y * delta * MOVE_SPEED
-		xr_origin.position.x += movement_input.x * delta * MOVE_SPEED
+		var movement := Vector3(movement_input.x * delta * MOVE_SPEED, 0, -movement_input.y * delta * MOVE_SPEED)
+		movement = movement.rotated(Vector3.UP, xr_origin.rotation.y)
+		xr_origin.position += movement
 	if smooth_turn_input != 0.0:
 		rotate_player(smooth_turn_input * SMOOTH_TURN_SPEED)
 
 
 func _on_right_hand_button_pressed(name: String) -> void:
+	print(name)
 	if name == "ax_button":
-		var fb_space_warp = Engine.get_singleton("OpenXRFbSpaceWarpExtensionWrapper")
-		if !fb_space_warp:
+		var frame_synthesis = Engine.get_singleton("OpenXRFrameSynthesisExtension")
+		if !frame_synthesis:
 			return
 
-		fb_space_warp.set_space_warp_enabled(!fb_space_warp.is_enabled())
+		frame_synthesis.enabled = !frame_synthesis.enabled
 
-		if fb_space_warp.is_enabled():
+		if frame_synthesis.enabled:
 			right_controller_label.text = right_controller_label.text.replace("DISABLED", "ENABLED")
 		else:
 			right_controller_label.text = right_controller_label.text.replace("ENABLED", "DISABLED")
@@ -85,9 +87,9 @@ func check_turn(name: String, value: Vector2) -> void:
 			if abs(value.x) > SNAP_TURN_THRESHOLD:
 				rotate_player(sign(value.x) * SNAP_TURN_ANGLE)
 				turn_timer.start()
-				var fb_space_warp = Engine.get_singleton("OpenXRFbSpaceWarpExtensionWrapper")
-				if fb_space_warp:
-					fb_space_warp.skip_space_warp_frame()
+				var frame_synthesis = Engine.get_singleton("OpenXRFrameSynthesisExtension")
+				if frame_synthesis:
+					frame_synthesis.skip_next_frame()
 	else:
 		smooth_turn_input = value.x
 
@@ -107,5 +109,6 @@ func rotate_player(angle: float):
 
 
 func _on_left_hand_input_vector_2_changed(name: String, value: Vector2) -> void:
+	prints(name, value)
 	if name == "primary":
 		movement_input = value

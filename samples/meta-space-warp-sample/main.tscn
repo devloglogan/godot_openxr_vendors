@@ -103,9 +103,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.352791, 0)
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.460909, 0.388594, -0.241118)
 tracker = &"left_hand"
-pose = &"grip"
-
-[node name="LeftControllerFbRenderModel" type="OpenXRFbRenderModel" parent="XROrigin3D/LeftHand"]
 
 [node name="Label3D" type="Label3D" parent="XROrigin3D/LeftHand"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.124, -0.186)
@@ -120,16 +117,12 @@ surface_material_override/0 = SubResource("StandardMaterial3D_7mycd")
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.478861, 0.468292, -0.241097)
 tracker = &"right_hand"
-pose = &"grip"
-
-[node name="RightControllerFbRenderModel" type="OpenXRFbRenderModel" parent="XROrigin3D/RightHand"]
-render_model_type = 1
 
 [node name="Label3D" type="Label3D" parent="XROrigin3D/RightHand"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.124, -0.186)
 pixel_size = 0.001
 text = "Turn Mode: SMOOTH
-Space Warp: ENABLED
+Frame Synthesis: ENABLED
 
 [B] Toggle Turn Mode
 [A] Enable/Disable Space Warp
