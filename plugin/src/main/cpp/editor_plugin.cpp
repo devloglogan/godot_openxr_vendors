@@ -173,48 +173,6 @@ void OpenXRVendorsEditorPlugin::_on_asset_library_request_completed(int p_result
 	p_asset_library_filter->emit_signal("text_changed", p_asset_library_filter->get_text());
 }
 
-void OpenXRVendorsEditorPlugin::open_export_dialog() {
-	SceneTree *tree = get_tree();
-	if (tree == nullptr) {
-		return;
-	}
-
-	Window *root = tree->get_root();
-	if (root == nullptr) {
-		return;
-	}
-
-	Node *menu_bar = root->find_child("*MenuBar*", true, false);
-	if (menu_bar == nullptr) {
-		return;
-	}
-
-	PopupMenu *project_menu = Object::cast_to<PopupMenu>(menu_bar->find_child("*Project*", true, false));
-	if (project_menu == nullptr) {
-		return;
-	}
-
-	int item_count = project_menu->get_item_count();
-	int item_id = -1;
-	for (int i = 0; i < item_count; i++) {
-		if (project_menu->get_item_text(i) == "Export...") {
-			item_id = project_menu->get_item_id(i);
-		}
-	}
-
-	// Hacky fallback for non-English editor usecase.
-	if (item_id < 0 && item_count > 5) {
-		item_id = project_menu->get_item_id(5);
-	}
-
-	if (item_id < 0) {
-		UtilityFunctions::print_verbose("OpenXRVendorsEditorPlugin failed to find export dialog menu entry");
-		return;
-	}
-
-	project_menu->emit_signal("id_pressed", item_id);
-}
-
 OpenXRVendorsEditorPlugin::OpenXRVendorsEditorPlugin() {
 	ERR_FAIL_COND_MSG(singleton != nullptr, "An OpenXRVendorsEditorPlugin singleton already exists");
 	singleton = this;

@@ -215,7 +215,8 @@ public:
 			return;
 		}
 
-		editor_plugin->open_export_dialog();
+		EditorInterface *editor_interface = EditorInterface::get_singleton();
+		editor_interface->open_export_dialog();
 	}
 
 	String export_setting_path;
