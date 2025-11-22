@@ -322,7 +322,8 @@ public:
 			return;
 		}
 
-		editor_plugin->open_project_settings("application/boot_splash/image");
+		EditorInterface *editor_interface = EditorInterface::get_singleton();
+		editor_interface->open_project_settings("application/boot_splash", "application/boot_splash/image");
 	}
 
 	BootSplashRecommendation(String p_title, String p_description, String p_button_text, AlertType p_alert_type, ProjectType p_project_type, VendorType p_vendor_type, bool p_requires_restart) :
