@@ -60,9 +60,6 @@ protected:
 public:
 	static OpenXRVendorsEditorPlugin *get_singleton();
 
-	void open_asset_library(const String &p_filter_string);
-	void _on_asset_library_request_completed(int p_result, int p_response_code, const PackedStringArray &p_headers, const PackedByteArray &p_body, LineEdit *p_asset_library_filter, String p_search_string);
-
 	OpenXRVendorsEditorPlugin();
 	~OpenXRVendorsEditorPlugin();
 };

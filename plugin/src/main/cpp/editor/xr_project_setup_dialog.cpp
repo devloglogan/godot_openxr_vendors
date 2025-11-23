@@ -29,7 +29,6 @@
 
 #include "editor/xr_project_setup_dialog.h"
 
-#include "editor_plugin.h"
 #include "raw_headers/mr_startup.tscn.gen.h"
 #include "raw_headers/start_mr.gd.gen.h"
 #include "raw_headers/start_vr.gd.gen.h"
@@ -210,13 +209,10 @@ public:
 	}
 
 	void on_button_pressed() override {
-		OpenXRVendorsEditorPlugin *editor_plugin = OpenXRVendorsEditorPlugin::get_singleton();
-		if (editor_plugin == nullptr) {
-			return;
-		}
-
 		EditorInterface *editor_interface = EditorInterface::get_singleton();
-		editor_interface->open_export_dialog();
+		if (editor_interface != nullptr) {
+			editor_interface->open_export_dialog();
+		}
 	}
 
 	String export_setting_path;
@@ -318,13 +314,10 @@ public:
 	}
 
 	void on_button_pressed() override {
-		OpenXRVendorsEditorPlugin *editor_plugin = OpenXRVendorsEditorPlugin::get_singleton();
-		if (editor_plugin == nullptr) {
-			return;
-		}
-
 		EditorInterface *editor_interface = EditorInterface::get_singleton();
-		editor_interface->open_project_settings("application/boot_splash", "application/boot_splash/image");
+		if (editor_interface != nullptr) {
+			editor_interface->open_project_settings("application/boot_splash", "application/boot_splash/image");
+		}
 	}
 
 	BootSplashRecommendation(String p_title, String p_description, String p_button_text, AlertType p_alert_type, ProjectType p_project_type, VendorType p_vendor_type, bool p_requires_restart) :
@@ -338,15 +331,12 @@ public:
 	}
 
 	void on_button_pressed() override {
-		OpenXRVendorsEditorPlugin *editor_plugin = OpenXRVendorsEditorPlugin::get_singleton();
-		if (editor_plugin == nullptr) {
-			UtilityFunctions::print("Editor plugin is null!");
-			return;
-		}
-		UtilityFunctions::print("Editor plugin is not null.");
-
 		button->set_disabled(true);
-		editor_plugin->open_asset_library("Godot Meta Toolkit");
+
+		EditorInterface *editor_interface = EditorInterface::get_singleton();
+		if (editor_interface != nullptr) {
+			editor_interface->search_asset_library("Godot Meta Toolkit");
+		}
 	}
 
 	MetaToolkitInstalledRecommendation(String p_title, String p_description, String p_button_text, AlertType p_alert_type, ProjectType p_project_type, VendorType p_vendor_type, bool p_requires_restart) :

@@ -110,69 +110,6 @@ void OpenXRVendorsEditorPlugin::_open_project_setup() {
 	_xr_project_setup_dialog->open();
 }
 
-void OpenXRVendorsEditorPlugin::open_asset_library(const String &p_search_string) {
-	SceneTree *tree = get_tree();
-	if (tree == nullptr) {
-		return;
-	}
-
-	Window *root = tree->get_root();
-	if (root == nullptr) {
-		return;
-	}
-
-	Node *asset_lib = root->find_child("@EditorAssetLibrary@*", true, false);
-	if (asset_lib == nullptr) {
-		return;
-	}
-
-	Node *lib_main_vbox = asset_lib->find_child("@VBoxContainer@*", false, false);
-	if (lib_main_vbox == nullptr) {
-		return;
-	}
-
-	// Asset Library node has multiple HBoxContainer children, but the search container is added first.
-	Node *search_hb = lib_main_vbox->get_child(0);
-	if (search_hb == nullptr) {
-		return;
-	}
-
-	LineEdit *asset_library_filter = Object::cast_to<LineEdit>(search_hb->find_child("@LineEdit@*", false, false));
-	if (asset_library_filter == nullptr) {
-		return;
-	}
-
-	Button *asset_lib_button = Object::cast_to<Button>(root->find_child("AssetLib", true, false));
-	if (asset_lib_button == nullptr) {
-		return;
-	}
-
-	asset_lib_button->emit_signal("pressed");
-
-	if (!asset_library_filter->is_editable()) {
-		HTTPRequest *asset_lib_request = Object::cast_to<HTTPRequest>(asset_lib->find_child("*HTTPRequest*", true, false));
-		asset_lib_request->connect("request_completed", callable_mp(this, &OpenXRVendorsEditorPlugin::_on_asset_library_request_completed).bind(asset_library_filter, p_search_string), CONNECT_ONE_SHOT);
-	} else {
-		asset_library_filter->set_text(p_search_string);
-		asset_library_filter->emit_signal("text_changed", asset_library_filter->get_text());
-	}
-}
-
-void OpenXRVendorsEditorPlugin::_on_asset_library_request_completed(int p_result, int p_response_code, const PackedStringArray &p_headers, const PackedByteArray &p_body, LineEdit *p_asset_library_filter, String p_search_string) {
-	if (p_response_code != 200) {
-		UtilityFunctions::print_verbose(vformat("Asset Library HTTPRequest returned with response code %s", p_response_code));
-		return;
-	}
-
-	if (p_asset_library_filter == nullptr) {
-		UtilityFunctions::print_verbose("No Asset Library LineEdit node found");
-		return;
-	}
-
-	p_asset_library_filter->set_text(p_search_string);
-	p_asset_library_filter->emit_signal("text_changed", p_asset_library_filter->get_text());
-}
-
 OpenXRVendorsEditorPlugin::OpenXRVendorsEditorPlugin() {
 	ERR_FAIL_COND_MSG(singleton != nullptr, "An OpenXRVendorsEditorPlugin singleton already exists");
 	singleton = this;
