@@ -34,6 +34,7 @@
 
 struct XrUuid;
 struct XrMatrix4x4f;
+struct XrVector3f;
 
 #define UNPACK(...) __VA_ARGS__
 
@@ -128,6 +129,7 @@ struct XrMatrix4x4f;
 namespace OpenXRUtilities {
 godot::StringName uuid_to_string_name(const XrUuid &p_uuid);
 void xrMatrix4x4f_to_godot_projection(XrMatrix4x4f *m, godot::Projection &p);
+godot::Vector3 XrVector3f_to_godot_vector3(const XrVector3f &xr_vector3);
 }; //namespace OpenXRUtilities
 
 #endif // UTIL_H
